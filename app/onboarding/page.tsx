@@ -106,21 +106,6 @@ export default function OnboardingPage() {
       <section className="section" style={{ paddingTop: "0" }}>
         <div className="bg-glow-center" aria-hidden="true" />
         <div className="container" style={{ maxWidth: "780px" }}>
-          {/* Verstecktes Formular – Netlify erkennt die Felder beim Build */}
-          <form name="onboarding" data-netlify="true" hidden>
-            <input type="text" name="firmenname" /><input type="text" name="branche" />
-            <input type="text" name="inhaber" /><input type="tel" name="telefon" />
-            <input type="email" name="email" /><input type="url" name="website" />
-            <input type="text" name="adresse" /><textarea name="beschreibung" />
-            <textarea name="leistungen" /><textarea name="oeffnungszeiten" />
-            <textarea name="team" /><textarea name="usps" />
-            <input type="text" name="farben" /><textarea name="beispielwebsites" />
-            <input type="text" name="funktionen" /><input type="text" name="domain" />
-            <input type="text" name="domainName" /><input type="url" name="googleBewertung" />
-            <input type="url" name="instagram" /><input type="url" name="facebook" />
-            <textarea name="anmerkungen" />
-          </form>
-
           <form onSubmit={handleSubmit}>
 
             {/* 1 – Unternehmen */}

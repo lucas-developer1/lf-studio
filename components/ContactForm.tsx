@@ -71,14 +71,6 @@ export default function ContactForm() {
 
   return (
     <div className="glass--elevated contact-form-wrap">
-      {/* Verstecktes Formular – Netlify erkennt die Felder beim Build */}
-      <form name="kontakt" data-netlify="true" hidden>
-        <input type="text" name="name" />
-        <input type="text" name="betrieb" />
-        <input type="email" name="email" />
-        <textarea name="nachricht" />
-      </form>
-
       <form onSubmit={handleSubmit}>
         {/* Error Message */}
         {status === "error" && (
