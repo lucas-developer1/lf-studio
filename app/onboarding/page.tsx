@@ -7,7 +7,11 @@
 
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
-import type { Metadata } from "next";
+
+const encode = (data: Record<string, string>) =>
+  Object.keys(data)
+    .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(data[k]))
+    .join("&");
 
 const funktionenOptions = [
   "Kontaktformular",
@@ -42,13 +46,16 @@ export default function OnboardingPage() {
     e.preventDefault();
     setStatus("sending");
     try {
-      const res = await fetch("/api/onboarding", {
+      await fetch("/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, funktionen }),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: encode({
+          "form-name": "onboarding",
+          ...form,
+          funktionen: funktionen.join(", "),
+        }),
       });
-      if (res.ok) setStatus("success");
-      else setStatus("error");
+      setStatus("success");
     } catch {
       setStatus("error");
     }
@@ -99,6 +106,21 @@ export default function OnboardingPage() {
       <section className="section" style={{ paddingTop: "0" }}>
         <div className="bg-glow-center" aria-hidden="true" />
         <div className="container" style={{ maxWidth: "780px" }}>
+          {/* Verstecktes Formular – Netlify erkennt die Felder beim Build */}
+          <form name="onboarding" data-netlify="true" hidden>
+            <input type="text" name="firmenname" /><input type="text" name="branche" />
+            <input type="text" name="inhaber" /><input type="tel" name="telefon" />
+            <input type="email" name="email" /><input type="url" name="website" />
+            <input type="text" name="adresse" /><textarea name="beschreibung" />
+            <textarea name="leistungen" /><textarea name="oeffnungszeiten" />
+            <textarea name="team" /><textarea name="usps" />
+            <input type="text" name="farben" /><textarea name="beispielwebsites" />
+            <input type="text" name="funktionen" /><input type="text" name="domain" />
+            <input type="text" name="domainName" /><input type="url" name="googleBewertung" />
+            <input type="url" name="instagram" /><input type="url" name="facebook" />
+            <textarea name="anmerkungen" />
+          </form>
+
           <form onSubmit={handleSubmit}>
 
             {/* 1 – Unternehmen */}

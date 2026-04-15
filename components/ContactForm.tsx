@@ -1,11 +1,16 @@
 "use client";
 
 /**
- * ContactForm – Kontaktformular mit Resend-Anbindung, Ladezustand und Feedback
+ * ContactForm – Kontaktformular mit Netlify Forms
  */
 
 import { useState } from "react";
 import { Send, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+
+const encode = (data: Record<string, string>) =>
+  Object.keys(data)
+    .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(data[k]))
+    .join("&");
 
 interface FormData {
   name: string;
@@ -32,20 +37,14 @@ export default function ContactForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
-
     try {
-      const res = await fetch("/api/contact", {
+      await fetch("/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: encode({ "form-name": "kontakt", ...form }),
       });
-
-      if (res.ok) {
-        setStatus("success");
-        setForm({ name: "", betrieb: "", email: "", nachricht: "" });
-      } else {
-        setStatus("error");
-      }
+      setStatus("success");
+      setForm({ name: "", betrieb: "", email: "", nachricht: "" });
     } catch {
       setStatus("error");
     }
@@ -72,6 +71,14 @@ export default function ContactForm() {
 
   return (
     <div className="glass--elevated contact-form-wrap">
+      {/* Verstecktes Formular – Netlify erkennt die Felder beim Build */}
+      <form name="kontakt" data-netlify="true" hidden>
+        <input type="text" name="name" />
+        <input type="text" name="betrieb" />
+        <input type="email" name="email" />
+        <textarea name="nachricht" />
+      </form>
+
       <form onSubmit={handleSubmit}>
         {/* Error Message */}
         {status === "error" && (
