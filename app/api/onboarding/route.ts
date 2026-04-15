@@ -4,8 +4,6 @@
 
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 function row(label: string, value: string) {
   if (!value) return "";
   return `
@@ -24,6 +22,7 @@ function section(title: string, rows: string) {
 }
 
 export async function POST(req: Request) {
+  const resend = new Resend(process.env.RESEND_API_KEY);
   try {
     const data = await req.json();
     const {
